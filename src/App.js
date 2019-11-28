@@ -1,11 +1,6 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
-// FilterableProductTable (orange): contains the entirety of the example
-// SearchBar (blue): receives all user input
-// ProductTable (green): displays and filters the data collection based on user input
-// ProductCategoryRow (turquoise): displays a heading for each category
-// ProductRow (red): displays a row for each product
 
 const FilterableProductTable = () => {
     return (
@@ -17,27 +12,72 @@ const FilterableProductTable = () => {
 };
 
 const SearchBar = () => {
-    return <div className="searchBar"></div>;
+    return (
+        <div className="searchBar">
+            <form>
+                <label htmlFor="searchBar">
+                    <input
+                        id="searchBar"
+                        value="hi"
+                        onChange={console.log(2)}
+                    />
+                </label>
+                <br />
+                <label htmlFor="checkBox">
+                    <input type="checkbox" id="checkBox" value={false} />
+                    Only show products in stock
+                </label>
+            </form>
+        </div>
+    );
 };
 
 const ProductTable = () => {
+    const categories = [];
+    console.log(categories);
+    data.map(e =>
+        categories.indexOf(e.category) === -1
+            ? categories.push(e.category)
+            : null,
+    );
     return (
         <div className="productTable">
-            <ProductCategoryRow />
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                {categories.map(e => (
+                    <ProductCategoryRow cat={e} />
+                ))}
+            </table>
         </div>
     );
 };
 
-const ProductCategoryRow = () => {
+const ProductCategoryRow = ({ cat }) => {
     return (
-        <div className="productCategoryRow">
-            <ProductRow />
-        </div>
+        <React.Fragment>
+            <tr>
+                <th colSpan="2">{cat}</th>
+            </tr>
+            <ProductRow cat={cat} />
+        </React.Fragment>
     );
 };
 
-const ProductRow = () => {
-    return <div className="productRow"></div>;
+const ProductRow = ({ cat }) => {
+    const products = data.filter(product => product.category === cat);
+    return products.map(e => {
+        return (
+            <tr style={{ color: e.stocked ? 'red' : 'black' }}>
+                <td>{e.name}</td>
+                <td>{e.price}</td>
+            </tr>
+        );
+    });
 };
 
 function App() {
